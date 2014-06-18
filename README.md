@@ -30,7 +30,7 @@ anything that happens before the require will not be sent to oohlalog
 * set OohLaLogWriter log writer as your log writer and add your API key (see example below)
 
 ```php
-'log.writer' => new OohLaLog\OohLaLogWriter(array('apiKey' => '(string)')),
+'log.writer' => new OohLaLog\OohLaLogWriter(array('apiKey' => 'XXX-XXXXXX-XXX-XX')),
 ```
 
 * Get logging!
