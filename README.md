@@ -30,12 +30,16 @@ anything that happens before the require will not be sent to oohlalog
 * set OohLaLogWriter log writer as your log writer and add your API key (see example below)
 
 ```php
-'log.writer' => new OohLaLog\OohLaLogWriter(array('apiKey' => 'XXX-XXXXXX-XXX-XX')),
+'log.writer' => new OohLaLog\OohLaLogWriter(array('apiKey' => 'XXX-XXXXXX-XXX-XX'))
 ```
 
 * Get logging!
 
 You can also set other attributes of the logger such as the message format with the variables %label% (error label) %date% (iso time) and %message% (the message you send to the log writer)
+
+```php
+'log.writer' => new OohLaLog\OohLaLogWriter(array('apiKey' => 'XXX-XXXXXX-XXX-XX', messageFormat => "%label% - %message%"))
+```
 
 ### Limitations
 
