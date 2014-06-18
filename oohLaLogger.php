@@ -7,7 +7,7 @@
 		//$ollPurgeTime = 10000;
 		$ollThreshold = 1;
 		$logThis = false;
-		
+
 		if (!isset($GLOBALS["OLL_LAST_CALL"])){
 			$GLOBALS["OLL_LAST_CALL"] = 0;
 		}
@@ -23,8 +23,8 @@
 		if (!isset($GLOBALS["OLL_PRINT_ERRORS"])){
 			$GLOBALS["OLL_PRINT_ERRORS"] = true;
 		}
-		
-		
+
+
 		$timestamp = 0;
 		if ($PHP_VERSION_ID < 50300){
 			$date = new DateTime();
@@ -72,23 +72,23 @@
 		);
 
 		// set of errors for which a var trace will be saved
-		if ( $level[$errorno] == 'ERROR' && ( $GLOBALS["OLL_LOG_LEVEL"] == 1 || 
-			$GLOBALS["OLL_LOG_LEVEL"] == 3 || 
-			$GLOBALS["OLL_LOG_LEVEL"] == 5 || 
+		if ( $level[$errorno] == 'ERROR' && ( $GLOBALS["OLL_LOG_LEVEL"] == 1 ||
+			$GLOBALS["OLL_LOG_LEVEL"] == 3 ||
+			$GLOBALS["OLL_LOG_LEVEL"] == 5 ||
 			$GLOBALS["OLL_LOG_LEVEL"] == 7 ) )
 		{
 			$logThis = true;
 		}
-		if ( $level[$errorno] == 'WARN' && ( $GLOBALS["OLL_LOG_LEVEL"] == 2 || 
-			$GLOBALS["OLL_LOG_LEVEL"] == 3 || 
-			$GLOBALS["OLL_LOG_LEVEL"] == 6 || 
+		if ( $level[$errorno] == 'WARN' && ( $GLOBALS["OLL_LOG_LEVEL"] == 2 ||
+			$GLOBALS["OLL_LOG_LEVEL"] == 3 ||
+			$GLOBALS["OLL_LOG_LEVEL"] == 6 ||
 			$GLOBALS["OLL_LOG_LEVEL"] == 7 ) )
 		{
 			$logThis = true;
 		}
-		if ( $level[$errorno] == 'INFO' && ( $GLOBALS["OLL_LOG_LEVEL"] == 4 || 
-			$GLOBALS["OLL_LOG_LEVEL"] == 5 || 
-			$GLOBALS["OLL_LOG_LEVEL"] == 6 || 
+		if ( $level[$errorno] == 'INFO' && ( $GLOBALS["OLL_LOG_LEVEL"] == 4 ||
+			$GLOBALS["OLL_LOG_LEVEL"] == 5 ||
+			$GLOBALS["OLL_LOG_LEVEL"] == 6 ||
 			$GLOBALS["OLL_LOG_LEVEL"] == 7 ) )
 		{
 			$logThis = true;
@@ -99,6 +99,7 @@
 				message => $errormsg,
 				category => $errortype[$errorno],
 				timestamp => $timestamp,
+				agent => 'PHP',
 				details => 'File Name: ' . $filename . '; Line Number: ' . $linenum . ';'
 				);
 
@@ -115,7 +116,7 @@
 				sendLog();
 				if (isset($GLOBALS["OLL_PRINT_ERRORS"]) && $GLOBALS["OLL_PRINT_ERRORS"]){
 					print_r($GLOBALS["OLL_PAYLOAD"]);
-				}	
+				}
 			//}
 		}
 	}
@@ -126,7 +127,7 @@
 		$ollPath = '/api/logging/save.json';
 		$ollPort = '80';
 		$url = 'http://' . $ollHost . ':' . $ollPort . $ollPath . '?apiKey=' . $GLOBALS["oohLaLogApiKey"];
-		
+
 		//only send something out if there are logs in the payload
 		if (isset($GLOBALS["oohLaLogApiKey"])){
 			if (sizeof($GLOBALS["OLL_PAYLOAD"]) > 0){
@@ -135,7 +136,7 @@
 				$cmd = "curl -X POST -H 'Content-Type: application/json'";
 				$cmd.= " -d '" . $payload . "' " . "'" . $url . "'";
 				$cmd .= " > /dev/null 2>&1 &";
-				
+
 				exec($cmd, $output, $exit);
 				$GLOBALS["OLL_PAYLOAD"] = NULL;
 			}
