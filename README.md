@@ -23,7 +23,20 @@ require('oohLaLogger.php');
 ```
 
 anything that happens before the require will not be sent to oohlalog
- 
+
+## PHP Slim Log Writer
+
+* add OohLaLoggerSlim.php to your project
+* set OohLaLogWriter log writer as your log writer and add your API key (see example below)
+
+```php
+'log.writer' => new OohLaLog\OohLaLogWriter(array('apiKey' => '(string)')),
+```
+
+* Get logging!
+
+You can also set other attributes of the logger such as the message format with the variables %label% (error label) %date% (iso time) and %message% (the message you send to the log writer)
+
 ### Limitations
 
 Currently uses the exec command to fork a curl process, you dont get a response but it no longer blocks in php while running
