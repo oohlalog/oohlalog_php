@@ -26,20 +26,32 @@ class OohLaLogWriter
 
     public function write($object, $level){
         //Determine label
-         $label = 'DEBUG';
-         switch ($level) {
-             case \Slim\Log::FATAL:
-                 $label = 'FATAL';
-                 break;
-             case \Slim\Log::ERROR:
-                 $label = 'ERROR';
-                 break;
-             case \Slim\Log::WARN:
-                 $label = 'WARN';
-                 break;
-             case \Slim\Log::INFO:
-                 $label = 'INFO';
-                 break;
+        $label = 'DEBUG';
+        switch ($level) {
+            case \Slim\Log::EMERGENCY: // EMERGENCY not supported;  Translate to FATAL.
+                $label = 'FATAL';
+                break;
+            case \Slim\Log::ALERT:     // ALERT not supported;  Translate to FATAL.
+                $label = 'FATAL';
+                break;
+            case \Slim\Log::CRITICAL:  // CRITICAL not supported;  Translate to FATAL.
+                $label = 'FATAL';
+                break;
+            case \Slim\Log::FATAL:
+                $label = 'FATAL';
+                break;
+            case \Slim\Log::ERROR:
+                $label = 'ERROR';
+                break;
+            case \Slim\Log::WARN:
+                $label = 'WARN';
+                break;
+            case \Slim\Log::NOTICE:    // NOTICE not supported;  Translate to INFO.
+                $label = 'INFO';
+                break;
+            case \Slim\Log::INFO:
+                $label = 'INFO';
+                break;
          }
 
          if ($level <= $this->settings['logLevel'] ){
