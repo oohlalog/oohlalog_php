@@ -12,15 +12,16 @@ class OohLaLogWriter
         //Merge user settings
         $this->settings = array_merge(array(
             'logFile' => '/usr/local/php/error.log',
-            'logLevel' => \Slim\Log::ERROR,
+            'logLevel' => \Slim\Log::INFO,
             'printErrors' => true,
             'host' => 'oohlalog.com',
             'path' => '/api/logging/save.json',
             'port' => '80',
-            'messageFormat' => "%label% - %message%"
+            'messageFormat' => "%label% - %message%",
+            'threshold' => 100
         ), $settings);
 
-        $this->payload = array( logs => array());
+        $this->payload = array( 'logs' => array());
     }
 
     public function write($object, $level){
@@ -62,10 +63,21 @@ class OohLaLogWriter
 
              array_push($this->payload['logs'],$log);
 
-             $this->sendLogs();
+             if ($this->checkSize()) {
+                $this->sendLogs();
+             }
          }
 
     }
+
+    private function checkSize() {
+        if (count($this->payload['logs']) >= $this->settings['threshold']) {
+            return true;
+        }
+        else {
+            return false;
+        } 
+    }    
 
     private function sendLogs() {
         $url = 'http://' . $this->settings['host'] . ':' . $this->settings['port'] . $this->settings['path'] . '?apiKey=' . $this->settings["apiKey"];
@@ -79,7 +91,7 @@ class OohLaLogWriter
                  $cmd .= " > /dev/null 2>&1 &";
 
                  exec($cmd, $output, $exit);
-                 $this->payload = [];
+                 $this->payload['logs'] = [];
              }
          }
          else {
