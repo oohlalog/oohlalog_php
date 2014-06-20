@@ -35,6 +35,7 @@ anything that happens before the require will not be sent to oohlalog
 
 * Get logging!
 
+
 You can also set other attributes of the logger such as the message format with the variables %label% (error label), %date% (iso time), and %message% (the message you send to the log writer).  Additionally, you can set the threshold parameter which corresponds to the number of logs buffered before sending to the OohLaLog server (lower numbers provide stronger guarantees but reduced performance).  If not specified, the default value is 100.
 
 ```php
@@ -45,4 +46,19 @@ You can also set other attributes of the logger such as the message format with 
 
 ### Limitations
 
-Currently uses the exec command to fork a curl process. You dont get a response, but it no longer blocks in php while running.
+* Currently uses the exec command to fork a curl process. You dont get a response, but it no longer blocks in php while running.
+* The logging levels supported by OohLaLog are slightly different from thos available in Slim.  The table below shows how Slim logging levels translate to OohLaLog levels.
+
+| Slim Levels          | OohLaLog Levels |
+| -------------------- | --------------- |
+| \Slim\Log::EMERGENCY | FATAL           |
+| \Slim\Log::ALERT     | FATAL           |
+| \Slim\Log::CRITICAL  | FATAL           |
+| \Slim\Log::FATAL     | FATAL           |
+| \Slim\Log::ERROR     | ERROR           |
+| \Slim\Log::WARN      | WARN            |
+| \Slim\Log::NOTICE    | INFO            |
+| \Slim\Log::INFO      | INFO            |
+| \Slim\Log::DEBUG     | DEBUG           |
+
+
