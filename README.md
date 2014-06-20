@@ -36,12 +36,18 @@ anything that happens before the require will not be sent to oohlalog
 * Get logging!
 
 
-You can also set other attributes of the logger such as the message format with the variables %label% (error label), %date% (iso time), and %message% (the message you send to the log writer).  Additionally, you can set the threshold parameter which corresponds to the number of logs buffered before sending to the OohLaLog server (lower numbers provide stronger guarantees but reduced performance).  If not specified, the default value is 100.
+### Optional Attributes  
+* messageFormat: Format of the log message. This can be set with the variables %label% (error label), %date% (iso time), and %message% (the message you send to the log writer).  
+* quantityThreshold: Size of buffer that causes a flush the OohLaLog server. Default = 100.
+* timeThreshold = Time waited(in milliseconds) before force flushing log buffer to the OohLaLogServer. Default = 10000.
 
+*NOTE:* For both quantityThreshold and timeThreshold, lower numbers provide stronger guarantees but reduced performance.
+ 
 ```php
 'log.writer' => new OohLaLog\OohLaLogWriter(array('apiKey' => 'XXX-XXXXXX-XXX-XX', 
                                                   'messageFormat' => "%label% - %message%",
-                                                  'threshold' => 50))
+                                                  'quantityThreshold' => 50),
+                                                  'timeThreshold' => 5000)
 ```
 
 ### Limitations
