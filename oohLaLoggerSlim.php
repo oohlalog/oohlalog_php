@@ -18,10 +18,11 @@ class OohLaLogWriter
             'path' => '/api/logging/save.json',
             'port' => '80',
             'messageFormat' => "%label% - %message%",
-            'threshold' => 100
+            'quantityThreshold' => 150,
+            'timeThreshold' => 10000
         ), $settings);
-
-        $this->payload = array( 'logs' => array());
+        $this->payload = array('logs' => array());
+        $this->lastSend = microtime(true) * 1000;
     }
 
     public function write($object, $level){
@@ -75,20 +76,18 @@ class OohLaLogWriter
 
              array_push($this->payload['logs'],$log);
 
-             if ($this->checkSize()) {
+             if ($this->checkSize() || $this->checkTime()) {
                 $this->sendLogs();
              }
          }
+    }
 
+    private function checkTime() {
+        return ((microtime(true) * 1000) - $this->lastSend >= $this->settings['timeThreshold']) ? true : false;
     }
 
     private function checkSize() {
-        if (count($this->payload['logs']) >= $this->settings['threshold']) {
-            return true;
-        }
-        else {
-            return false;
-        } 
+        return (count($this->payload['logs']) >= $this->settings['quantityThreshold']) ? true : false;
     }    
 
     private function sendLogs() {
@@ -103,6 +102,7 @@ class OohLaLogWriter
                  $cmd .= " > /dev/null 2>&1 &";
 
                  exec($cmd, $output, $exit);
+                 $this->lastSend = microtime(true) * 1000;
                  $this->payload['logs'] = [];
              }
          }
